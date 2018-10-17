@@ -60,6 +60,7 @@ module Whitehall
             search_format_types
             world_locations
             document_collections
+            content_store_document_type
           },
           date: %w{public_timestamp},
           boolean: %w{

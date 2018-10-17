@@ -3,7 +3,7 @@ require 'whitehall/document_filter/filterer'
 module Whitehall::DocumentFilter
   class SearchRummager < Filterer
     def announcements_search
-      filter_args = standard_filter_args.merge(filter_by_announcement_type)
+      filter_args = standard_filter_args.merge(filter_by_announcement_type_2)
       @results = Whitehall.search_client.search(filter_args)
     end
 
@@ -113,6 +113,10 @@ module Whitehall::DocumentFilter
           non_world_announcement_types
         end
       { filter_search_format_types: announcement_types }
+    end
+
+    def filter_by_announcement_type_2
+      { filter_content_store_document_type: selected_announcement_filter_option_2 }
     end
 
     def filter_by_publication_type

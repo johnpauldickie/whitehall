@@ -70,6 +70,11 @@ module Whitehall::DocumentFilter
       Whitehall::AnnouncementFilterOption.find_by_slug(filter_option)
     end
 
+    def selected_announcement_filter_option_2
+      filter_option = @params[:announcement_filter_option] || @params[:announcement_type_option] || @params[:announcement_type]
+      "news_story" if filter_option == "news-stories"
+    end
+
     def selected_people_option
       @people.reject! { |l| l == "all" }
       Person.where(slug: @people)
