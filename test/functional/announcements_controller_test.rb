@@ -265,12 +265,13 @@ class AnnouncementsControllerTest < ActionController::TestCase
   end
 
   view_test "index generates an atom feed with entries for announcements matching the current filter" do
-    Sidekiq::Testing.inline! do
+    with_stubbed_rummager(@rummager) do
       org = create(:organisation, name: "org-name")
-      other_org = create(:organisation, name: "other-org")
       news = create(:published_news_article, organisations: [org], first_published_at: 1.week.ago)
-      _speech = create(:published_speech, organisations: [other_org], delivered_on: 3.days.ago)
 
+      @rummager.expects(:search).returns({'results' =>
+                                            [{'format' => 'news_article', 'id' => news.id}]
+                                         })
       get :index, params: { departments: [org.to_param] }, format: :atom
 
       assert_select_atom_feed do
@@ -281,18 +282,16 @@ class AnnouncementsControllerTest < ActionController::TestCase
 
   view_test "index generates an atom feed with the legacy announcement_type_option param set" do
     with_stubbed_rummager(@rummager) do
-
-      news = {'format' => 'news_article', 'id'=>'news_id', 'first_published_at' => 1.week.ago.iso8601}
-      speech = {'format' => 'speech', 'id'=>'speech_id', 'delivered_on' => 3.days.ago.iso8601}
+      news = create(:published_news_story, first_published_at: 1.week.ago)
 
       @rummager.expects(:search).returns({'results' =>
-                                            [news, speech]
+                                            [{'format' => 'news_article', 'id' => news.id}]
                                          })
 
       get :index, params: { announcement_type_option: 'news-stories' }, format: :atom
 
       assert_select_atom_feed do
-        assert_select_atom_entries([OpenStruct.new(news)])
+        assert_select_atom_entries([news])
       end
     end
   end
