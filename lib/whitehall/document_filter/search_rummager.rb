@@ -13,7 +13,7 @@ module Whitehall::DocumentFilter
         count: @per_page.to_s,
         fields: %w[content_store_document_type government_name is_historic
                    public_timestamp organisations operational_field format
-                   content_id title description content_store_document_type display_type id]
+                   content_id title description display_type id]
       }
     end
 
@@ -116,7 +116,13 @@ module Whitehall::DocumentFilter
     end
 
     def filter_by_announcement_type_2
-      { filter_content_store_document_type: selected_announcement_filter_option_2 }
+      # if selected_announcement_filter_option_2
+      #   { filter_content_store_document_type: selected_announcement_filter_option_2 }
+      # else
+        {
+          filter_content_store_document_type: ["news_story"],
+        }
+      # end
     end
 
     def filter_by_publication_type
