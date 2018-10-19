@@ -3,7 +3,7 @@ require 'whitehall/document_filter/filterer'
 module Whitehall::DocumentFilter
   class SearchRummager < Filterer
     def announcements_search
-      filter_args = standard_filter_args.merge(filter_by_announcement_type_2)
+      filter_args = standard_filter_args.merge(filter_by_announcement_type)
       @results = Whitehall.search_client.search(filter_args)
     end
 
@@ -106,23 +106,13 @@ module Whitehall::DocumentFilter
     def filter_by_announcement_type
       announcement_types =
         if selected_announcement_filter_option
-          selected_announcement_filter_option.search_format_types
+          selected_announcement_filter_option.document_type
         elsif include_world_location_news
-          [Announcement.search_format_type]
+          all_announcement_types
         else
           non_world_announcement_types
         end
-      { filter_search_format_types: announcement_types }
-    end
-
-    def filter_by_announcement_type_2
-      # if selected_announcement_filter_option_2
-      #   { filter_content_store_document_type: selected_announcement_filter_option_2 }
-      # else
-        {
-          filter_content_store_document_type: ["news_story"],
-        }
-      # end
+      { filter_content_store_document_type: announcement_types }
     end
 
     def filter_by_publication_type
@@ -142,16 +132,11 @@ module Whitehall::DocumentFilter
   private
 
     def all_announcement_types
-      all_descendants = Announcement.concrete_descendant_search_format_types
-      descendants_without_news = all_descendants - [NewsArticle.search_format_type]
-      news_article_subtypes = NewsArticleType.search_format_types
-      descendants_without_news + news_article_subtypes
+      ["world_location_news_article", "world_news_story"].concat(non_world_announcement_types)
     end
 
     def non_world_announcement_types
-      types = all_announcement_types
-      types = types - NewsArticleType::WorldNewsStory.search_format_types
-      types - [WorldLocationNewsArticle.search_format_type]
+      all_announcement_filter_options.map(&:document_type).flatten
     end
   end
 end
