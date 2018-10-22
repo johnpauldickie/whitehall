@@ -106,6 +106,7 @@ module Whitehall
               raise GdsApi::HTTPErrorResponse, "cannot filter by field '#{field_name}', its type is not known"
             end
           end
+        results = format_organisations(results)
         end
 
         if order && order.any?
@@ -116,6 +117,20 @@ module Whitehall
           "total" => results.count,
           "results" => paginate(results, per_page, page)
         }
+      end
+
+      def format_organisations(results)
+        # Now we're querying the 'search' endpoint, results["organisations"]
+        # needs to return a hash
+        results.each do |result|
+          organisations = result.fetch("organisations", [])
+          if organisations.any? && organisations[0].is_a?(String)
+            formatted_orgs = []
+            organisations.each { |org| formatted_orgs << { "slug" => org } }
+            result["organisations"] = formatted_orgs
+          end
+        end
+        results
       end
 
       def paginate(results, per_page, page)
@@ -179,13 +194,23 @@ module Whitehall
 
       def filter_by_simple_field(field, desired_field_values, document_hashes)
         document_hashes.select do |document_hash|
-          value = document_hash.fetch(field, [])
+          if field == "organisations"
+            value = organisation_slugs(document_hash["organisations"])
+          else
+            value = document_hash.fetch(field, [])
+          end
           if value.is_a?(String)
             [*desired_field_values].include?(value)
           else
             ([*desired_field_values] & value).any?
           end
         end
+      end
+
+      def organisation_slugs(organisations)
+        slugs = []
+        organisations.each { |org| slugs << org["slug"] }
+        slugs
       end
 
       def filter_by_date_field(field, date_filter_hash, document_hashes)
