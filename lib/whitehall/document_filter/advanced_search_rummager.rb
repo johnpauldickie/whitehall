@@ -1,12 +1,7 @@
 require 'whitehall/document_filter/filterer'
 
 module Whitehall::DocumentFilter
-  class Rummager < Filterer
-    def announcements_search
-      filter_args = standard_filter_args.merge(filter_by_announcement_type)
-      @results = Whitehall.government_search_client.advanced_search(filter_args)
-    end
-
+  class AdvancedSearchRummager < Filterer
     def publications_search
       filter_args = standard_filter_args.merge(filter_by_publication_type)
                                         .merge(filter_by_official_document_status)
