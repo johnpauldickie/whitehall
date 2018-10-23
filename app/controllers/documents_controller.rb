@@ -9,8 +9,15 @@ class DocumentsController < PublicFacingController
 
 private
 
-  def build_document_filter
-    search_backend.new(cleaned_document_filter_params)
+  def build_document_filter(filter_type=nil)
+    if Rails.env.test?
+      search_backend = Whitehall::DocumentFilter::Mysql
+    elsif filter_type == "announcements"
+      search_backend = Whitehall::DocumentFilter::SearchRummager
+    else
+      search_backend = Whitehall::DocumentFilter::AdvancedSearchRummager
+    end
+    search_backend.new(cleaned_document_filter_params) # Whitehall::DocumentFilter::Rummager
   end
 
   def cleaned_document_filter_params

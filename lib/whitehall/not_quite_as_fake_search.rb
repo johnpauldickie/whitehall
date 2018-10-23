@@ -7,7 +7,7 @@ module Whitehall
       Whitehall.search_client = Whitehall::NotQuiteAsFakeSearch::GdsApiRummager.new(
         SearchIndex.government_search_index_path, store
       )
-      Whitehall.search_backend = Whitehall::DocumentFilter::Rummager
+      Whitehall.search_backend = Whitehall::DocumentFilter::AdvancedSearchRummager
     end
 
     def self.start_faking_it_again!
