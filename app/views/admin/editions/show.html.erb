@@ -69,9 +69,6 @@
       <% end %>
     <% end %>
 
-    <% if LinkCheckerApiService.has_links?(@edition, convert_admin_links: false) %>
-      <%= render 'admin/link_check_reports/link_check_report', report: (@edition.link_check_reports.last || @edition.link_check_reports.build) %>
-    <% end %>
 
     <%= render partial: "history_state", locals: { edition: @edition } %>
     <% if @edition.imported? %>
