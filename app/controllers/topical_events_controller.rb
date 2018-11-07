@@ -2,11 +2,12 @@ class TopicalEventsController < ClassificationsController
   enable_request_formats show: :atom
 
   def show
+    search_service = RummagerSearchService.new
     @classification = TopicalEvent.friendly.find(params[:id])
     @content_item = Whitehall.content_store.content_item(@classification.base_path)
     @publications = fetch_related_documents(filter_format: 'publication')
     @consultations = fetch_related_documents(filter_format: 'consultation')
-    @announcements = fetch_related_documents(filter_format: 'news_article')
+    @announcements = search_service.filter_by_topical_event(@classification.slug, filter_format: 'news_article')
     @detailed_guides = @classification.published_detailed_guides.includes(:translations, :document).limit(5)
     @featurings = decorate_collection(@classification.classification_featurings.includes(:image, edition: :document).limit(5), ClassificationFeaturingPresenter)
 
