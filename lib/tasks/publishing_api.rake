@@ -87,4 +87,16 @@ namespace :publishing_api do
 
     puts "Finished queuing items for Publishing API"
   end
+
+  desc "Republish organisations from range of ids"
+  task :republish_organisations, [:start_id, :end_id] => :environment do |_, args|
+    range = args[:start_id]..args[:end_id]
+    puts "Republishing..."
+    range.each do |i|
+      org = Organisation.where(id: i)
+      DataHygiene::PublishingApiRepublisher.new(org).perform
+      puts "id: #{org.first.id} => slug: #{org.first.slug}"
+      sleep(3.minutes)
+    end
+  end
 end
