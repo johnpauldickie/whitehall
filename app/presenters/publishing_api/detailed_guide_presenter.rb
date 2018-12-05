@@ -58,6 +58,7 @@ module PublishingApi
         body: body,
         change_history: item.change_history.as_json,
         emphasised_organisations: item.lead_organisations.map(&:content_id),
+        has_brexit_update: item.has_brexit_update,
         related_mainstream_content: related_mainstream_content_ids,
       }
       details_hash = maybe_add_national_applicability(details_hash)

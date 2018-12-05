@@ -248,4 +248,14 @@ class DetailedGuideTest < ActiveSupport::TestCase
   test "is rendered by government-frontend" do
     assert DetailedGuide.new.rendering_app == Whitehall::RenderingApp::GOVERNMENT_FRONTEND
   end
+
+  test "can persist has_brexit_update flag" do
+    e = build(:detailed_guide)
+    e.has_brexit_update = true
+    e.save!
+    assert e.reload.has_brexit_update?
+    e.has_brexit_update = false
+    e.save!
+    refute e.reload.has_brexit_update?
+  end
 end
