@@ -57,6 +57,7 @@ module PublishingApi
         emphasised_organisations: item.lead_organisations.map(&:content_id),
       }.tap do |details_hash|
         details_hash.merge!(PayloadBuilder::PoliticalDetails.for(item))
+        details_hash.merge!(PayloadBuilder::BrexitDetails.for(item))
         details_hash.merge!(PayloadBuilder::FirstPublicAt.for(item))
       end
     end

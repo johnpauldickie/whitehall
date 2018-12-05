@@ -135,7 +135,7 @@ module Admin::EditionsHelper
       yield(form)
       concat render('access_limiting_fields', form: form, edition: edition)
       concat render("scheduled_publication_fields", form: form, edition: edition)
-      concat render('has_brexit_update', form: form, edition: edition) if edition.is_a?(DetailedGuide)
+      concat render('has_brexit_update', form: form, edition: edition)
       concat standard_edition_publishing_controls(form, edition)
     end
   end

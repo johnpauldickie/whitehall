@@ -43,6 +43,7 @@ module PublishingApi
       }.tap do |details_hash|
         details_hash[:image] = image_details
         details_hash.merge!(PayloadBuilder::PoliticalDetails.for(item))
+        details_hash.merge!(PayloadBuilder::BrexitDetails.for(item))
         details_hash.merge!(PayloadBuilder::TagDetails.for(item))
         details_hash.merge!(PayloadBuilder::FirstPublicAt.for(item))
       end

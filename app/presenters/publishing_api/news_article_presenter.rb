@@ -75,6 +75,7 @@ module PublishingApi
         .merge(Image.for(news_article))
         .merge(PayloadBuilder::FirstPublicAt.for(news_article))
         .merge(PayloadBuilder::PoliticalDetails.for(news_article))
+        .merge(PayloadBuilder::BrexitDetails.for(news_article))
         .merge(PayloadBuilder::TagDetails.for(news_article))
     end
 

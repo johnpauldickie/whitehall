@@ -78,6 +78,7 @@ module PublishingApi
         .merge(WaysToRespond.for(consultation))
         .merge(PayloadBuilder::FirstPublicAt.for(consultation))
         .merge(PayloadBuilder::PoliticalDetails.for(consultation))
+        .merge(PayloadBuilder::BrexitDetails.for(consultation))
         .merge(PayloadBuilder::TagDetails.for(consultation))
     end
 

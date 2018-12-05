@@ -47,6 +47,7 @@ module PublishingApi
       details.merge!(speech_type_explanation)
       details.merge!(image_payload) if has_image?
       details.merge!(PayloadBuilder::PoliticalDetails.for(item))
+      details.merge!(PayloadBuilder::BrexitDetails.for(item))
       details.merge!(PayloadBuilder::FirstPublicAt.for(item))
     end
 

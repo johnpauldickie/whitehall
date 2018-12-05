@@ -936,4 +936,14 @@ class EditionTest < ActiveSupport::TestCase
     assert edition.has_secondary_sectors?
     assert edition.has_legacy_tags?
   end
+
+  test "can persist has_brexit_update flag" do
+    e = create(:edition)
+    e.has_brexit_update = true
+    e.save!
+    assert e.reload.has_brexit_update?
+    e.has_brexit_update = false
+    e.save!
+    refute e.reload.has_brexit_update?
+  end
 end

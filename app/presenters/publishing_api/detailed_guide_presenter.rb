@@ -58,12 +58,12 @@ module PublishingApi
         body: body,
         change_history: item.change_history.as_json,
         emphasised_organisations: item.lead_organisations.map(&:content_id),
-        has_brexit_update: item.has_brexit_update,
         related_mainstream_content: related_mainstream_content_ids,
       }
       details_hash = maybe_add_national_applicability(details_hash)
       details_hash[:image] = { url: item.logo_url } if item.logo_url.present?
       details_hash.merge!(PayloadBuilder::PoliticalDetails.for(item))
+      details_hash.merge!(PayloadBuilder::BrexitDetails.for(item))
       details_hash.merge!(PayloadBuilder::TagDetails.for(item))
       details_hash.merge!(PayloadBuilder::FirstPublicAt.for(item))
     end
