@@ -161,10 +161,6 @@ When(/^I filter the publications list by "([^"]*)"$/) do |publication_filter|
   click_on "Refresh results"
 end
 
-Then(/^I should see "([^"]*)" in the result list$/) do |title|
-  assert page.has_css?(".filter-results h3", text: %r{#{title}})
-end
-
 When(/^I publish a new publication called "([^"]*)"$/) do |title|
   begin_drafting_publication(title, first_published: Date.today.to_s)
   click_button "Save"
