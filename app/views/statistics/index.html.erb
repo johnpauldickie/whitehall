@@ -10,6 +10,10 @@
   </div>
 </header>
 
+<%= render "govuk_publishing_components/components/notice", {
+    title: "<p class=\"govuk-body\">This page is being replaced by <a href=\"https://www.gov.uk/search/statistics/\">Research and statistics search</a></p>",
+} %>
+
 <%= render 'impartiality' %>
 
 <%= render 'statistics_announcements/upcoming_calendar_tabs' if params[:publication_filter_option] == "statistics"  %>
